@@ -97,6 +97,21 @@ class Agent:
         winner = self.game.check_winner()
         final_state = self.game.get_game_state()
 
+        result_data = {
+            "winner": winner,
+            "final game state": final_state
+        }
+
+        # # Calculate final stats for the participant being evaluated
+        # # (Assuming you are evaluating one participant at a time for the leaderboard)
+        # final_score = game.players[str(target_pid)].ctf_progress
+        # final_accuracy = game.get_accuracy(target_pid) 
+
+        # # This JSON format allows AgentBeats to populate the leaderboard columns
+        # result_data = {
+        #     "score": final_score,
+        #     "accuracy": final_accuracy
+        # }
 
         # This makes the log viewable on the AgentBeats dashboard
         await updater.add_artifact(
@@ -106,7 +121,8 @@ class Agent:
 
         await updater.update_status(
             TaskState.succeeded, 
-            new_agent_text_message(f"Game Over! Winner: Player {winner}")
+            new_agent_text_message(f"Game Over! Winner: Player {winner}"),
+            new_agent_text_message(json.dumps(result_data))
         )
 
         # # Replace this example code with your agent logic
